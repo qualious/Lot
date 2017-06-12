@@ -7,6 +7,9 @@
     <!-- Albums -->
     <div class="row">
         <div class="col-sm-12">
+        {% if  user.username %}
+            <h3>{{ user.username }}'s Albums</h3>
+        {% endif %}
         </div>
             {% for album in all_albums %}
                 <div class="col-sm-4 col-lg-2">

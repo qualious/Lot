@@ -3,7 +3,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from .models import Album, Song
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from .forms import UserForm
 
@@ -73,3 +73,22 @@ class UserFormView(View):
                     login(request,user)
                     return redirect('music:index')
         return render(request, self.template_name, {'form':form})
+
+def user_logout(request):
+    logout(request)
+    return redirect('music:index')
+
+def user_login(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('music:index')
+            else:
+                return render(request, 'music/login_form.html', {'error_message': 'Your account has been disabled'})
+        else:
+            return render(request, 'music/login_form.html', {'error_message': 'Invalid login, try again!'})
+    return render(request, 'music/login_form.html')
