@@ -22,6 +22,4 @@ urlpatterns = [
     url(r'^songs/add/$', views.SongCreate.as_view(), name='song-add'),
     #/music/songs/'$pk'/delete
     url(r'^songs/(?P<pk>[0-9]+)/delete/$', views.SongDelete.as_view(), name='song-delete'),
-    #/music/songs/song-search/?q='$string'
-    url(r'^songs/song_search', views.SongSearchView.as_view(), name='song_search')
 ]

@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from .models import Album, Song
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.views.generic import View, ListView
+from django.views.generic import View
 from .forms import UserForm
 
 class IndexView(generic.ListView):
@@ -20,17 +20,10 @@ class SongView(generic.ListView):
     context_object_name = 'songs'
 
     def get_queryset(self):
-        return Song.objects.all()
-
-class SongSearchView(generic.ListView):
-    template_name = 'music/song_search.html'
-    context_object_name = 'songs'
-    
-    def get_queryset(self):
-        qs = super().get_queryset() 
-        return qs.filter(song_title__icontains=self.request.GET.get("q"))
-        
-
+        qs = Song.objects.all()
+        if self.request.GET['q'] is not None:
+            qs = qs.filter(song_title__icontains=self.request.GET['q'])
+        return qs
 
 class AlbumDetailView(generic.DetailView):
     model = Album
