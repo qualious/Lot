@@ -28,12 +28,10 @@
                                             <!--TODO: Not working, does nothing after it chages the URL-->
                                            <input type="hidden" name="user_id" value="{{ friend.from_user.id }}" />
                                             <a href="{% url 'music:accept-friend-req' friend.from_user.id %}"
-                                               class="btn btn-success btn-xs" role="button">
-                                                <span class="glyphicon glyphicon-ok"></span>&nbsp; Accept
+                                               class="btn btn-success btn-xs" role="button"> Accept
                                             </a>
                                             <a href="{% url 'music:decline-friend-req' friend.from_user.id %}"
-                                               class="btn btn-danger btn-xs" role="button">
-                                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Decline
+                                               class="btn btn-danger btn-xs" role="button"> Decline
                                             </a>
                                         </td>
                                     </tr>

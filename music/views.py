@@ -121,7 +121,7 @@ class FriendshipReqView(generic.ListView):
     context_object_name = 'friend_reqs'
 
     def get_queryset(self):
-        return FriendshipStatus.objects.all().filter(friendship_status="pending")
+        return FriendshipStatus.objects.all().filter(to_user=self.request.user, friendship_status="pending")
 
 
 def accept_friend_req(request):
