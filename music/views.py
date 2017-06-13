@@ -152,4 +152,5 @@ def decline_friend_req(request):
 
 
 def friend_remove(request):
-    FriendshipStatus.objects.all().filter(request.user.friendship_status == "not_friends")
+    qs = FriendshipStatus.objects.all().filter(to_user=request.user, friendship_status="friends")
+    qs.delete()
