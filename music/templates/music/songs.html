@@ -34,7 +34,7 @@
                                         </td>
                                         <td>
                                             <a href="{% url 'music:detail' song.album.id %}">
-                                                <img src="{{ song.album.album_logo }}" class="img-responsive" style="width: 20px; float: left; margin-right: 10px;" />
+                                                <img src="{{ song.album.album_logo.url }}" class="img-responsive" style="width: 20px; float: left; margin-right: 10px;" />
                                             </a>
                                             <a href="{% url 'music:detail' song.album.id %}">{{ song.album.album_title }}</a>
                                         </td>

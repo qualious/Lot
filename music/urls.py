@@ -28,4 +28,14 @@ urlpatterns = [
     url(r'^login/$', views.user_login, name='login'),
     #/logout/
     url(r'^logout/$', views.user_logout, name='logout'),
+    #/friends/
+    url(r'^friends/$', views.FriendView.as_view(), name='list-friends'),
+    #/friends/'$pk'/delete
+    url(r'^friends/(?P<pk>[0-9]+)/delete/$', views.friend_remove, name='friend-remove'),
+    #/friends/reqs
+    url(r'^friends/reqs',  views.FriendshipReqView.as_view(), name='friend-reqs'),
+    #/friends/reqs/'$pk'/answer
+    url(r'^friends/reqs/accept/(?P<pk>[0-9]+)/$',  views.accept_friend_req, name='accept-friend-req'),
+    #/friends/reqs/'$pk'/answer
+    url(r'^friends/reqs/decline/(?P<pk>[0-9]+)/$',  views.decline_friend_req, name='decline-friend-req'),
 ]

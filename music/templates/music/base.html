@@ -29,7 +29,7 @@
                     </a>
                 </li>
                 <li class="">
-                    <a href="{% url "music:songs"%}">
+                    <a href="{% url 'music:songs' %}">
                         <span class="glyphicon glyphicon-music" aria-hidden="true"></span>&nbsp; Songs
                     </a>
                 </li>
@@ -41,20 +41,31 @@
                 <button type="submit" class="btn btn-default">Search</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                {% if  user.username %}
+                    <li class="">
+                        <a href="{% url 'music:friend-reqs' %}">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Friend Requests
+                        </a>
+                    </li>
+                {% endif %}
                 <li class="">
-                    <a href="{% url "music:album-add" %}">
+                    {% if  user.username %}
+                    <a href="{% url 'music:album-add' %}">
+                    {% else %}
+                    <a href="{% url 'music:login' %}">
+                    {% endif %}
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Album
                     </a>
                 </li>
                 <li class="">
                     {% if  user.username %}
-                    <a href="{% url "music:logout" %}">
-                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp; Logout
-                    </a>
+                        <a href="{% url 'music:logout' %}">
+                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp; Logout
+                        </a>
                     {% else %}
-                    <a href="{% url "music:login" %}">
-                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp; Login/Register
-                    </a>    
+                        <a href="{% url 'music:login' %}">
+                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp; Login
+                        </a>
                     {% endif %}
                 </li>
             </ul>
