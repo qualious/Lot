@@ -12,12 +12,10 @@
                         <div class="caption">
                             <h2>{{ user.username }}</h2>
                             <h4>{{ user.email }}</h4>
-                            <form action="#" method="post" style="display: inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-default btn-sm">
+                               <a href="{% url 'music:accept-friend-req' friend.from_user.id %}"
+                                  class="btn btn-success btn-xs" role="button">
                                     <span class="glyphicon glyphicon-remove">Remove Friend</span>
-                                </button>
-                            </form>
+                                </a>
                         </div>
                     </div>
                 </div>
