@@ -2,12 +2,12 @@ from django.contrib.auth.models import User
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
-from .models import Album, Song
+from .models import Album, Song, FriendshipStatus
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from .forms import UserForm
-from friendship.models import Friend, Follow, FriendshipRequest
+from django.db import connection
 
 
 class IndexView(generic.ListView):
@@ -113,7 +113,7 @@ class FriendView(generic.ListView):
     context_object_name = 'all_friends'
 
     def get_queryset(self):
-        return Friend.objects.friends(self.request.user)
+        return FriendshipStatus.objects.all().filter(to_user=self.request.user, friendship_status="friends")
 
 
 class FriendshipReqView(generic.ListView):
@@ -121,49 +121,33 @@ class FriendshipReqView(generic.ListView):
     context_object_name = 'friend_reqs'
 
     def get_queryset(self):
-        return Friend.objects.unread_requests(user=self.request.user)
+        return FriendshipStatus.objects.all().filter(friendship_status="pending")
 
 
 def accept_friend_req(request):
-    print('accept')
-    user1_ID = request.user.id
-    user2_ID = User.objects.all().filter(id=request.POST['user_id']).first().id
-    friend_request = FriendshipRequest.objects.all().filter(from_user=user2_ID, to_user=user1_ID).first()
-    friend_request.accept()
-    if Friend.objects.are_friends(user1_ID, user2_ID):
-        return redirect("music:list-friends")
-    else:
-        return render(request, 'music/friends.html', {'error_message': 'Something went wrong, sorry!'})
-    # friend_request = FriendshipRequest.objects.get(pk=1)
-    # friend_request.accept()
-    # return redirect("music:list-friends")
-    # other_user = User.objects.get(pk=request.POST['user_id'])
-    # new_relationship = Friend.objects.add_friend(request.user, other_user)
-    # friend_request = FriendshipRequest.objects.get(pk=request.GET['user_id'])
-    # friend_request.accept()
-    # return redirect("music:list-friends")
+    from_user = User.objects.all().filter(id=request.POST['user_id'])
+    to_user = request.user
+    qs = FriendshipStatus.objects.all().filter(from_user=from_user, to_user=request.user, friendship_status="pending")
+    qs.delete()
+    friendship_status = "friends"
+    query = FriendshipStatus(from_user, to_user, friendship_status)
+    query.save()
+    query2 = FriendshipStatus(to_user, from_user, friendship_status)
+    query2.save()
+    return redirect('music:friend-reqs')
 
 
 def decline_friend_req(request):
-    print('decline')
-    user1_ID = request.user.id()
-    user2_ID = User.objects.all().filter(id=request.POST['user_id']).first().id
-    new_relationship = Friend.objects.add_friend(user1_ID, user2_ID)
-    friend_request = FriendshipRequest.objects.all().filter(from_user=user2_ID, to_user=user1_ID).first()
-    friend_request.decline()
-    if Friend.objects.are_friends(user1_ID, user2_ID):
-        return render(request, 'music/friends.html', {'error_message': 'Something went wrong, sorry!'})
-    else:
-        return redirect("music:list-friends")
-    # user1 = request.user
-    # user2 = User.objects.all().filter(id=request.POST['user_id'])
-    # print('decline')
-    # print(request.POST['user_id'])
-    # friend_request = FriendshipRequest.objects.get(pk=request.GET['user_id'])
-    # friend_request.reject()
-    # return redirect("music:list-friends")
+    # TODO:  make function for repeated lines
+    from_user = User.objects.all().filter(id=request.POST['user_id'])
+    to_user = request.user
+    qs = FriendshipStatus.objects.all().filter(from_user=from_user, to_user=request.user, friendship_status="pending")
+    qs.delete()
+    friendship_status = "not_friends"
+    query = FriendshipStatus(from_user, to_user, friendship_status)
+    query.save()
+    return redirect('music:friend-reqs')
 
 
 def friend_remove(request):
-    other_user = User.objects.get(pk=request.POST['q'])
-    Friend.objects.remove_friend(request.user, other_user)
+    FriendshipStatus.objects.all().filter(request.user.friendship_status == "not_friends")

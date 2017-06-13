@@ -26,3 +26,17 @@ class Song(models.Model):
 
     def __str__(self):
         return self.song_title
+
+
+class FriendshipStatus(models.Model):
+    from_user = models.ForeignKey(User, related_name='friendship_requests_sent')
+    to_user = models.ForeignKey(User, related_name='friendship_requests_received')
+    friendship_status = models.CharField(max_length=50, default="not_friends")
+
+    def __str__(self):
+        if self.friendship_status == "pending":
+            return "User #%s has requested friendship to #%s" % (self.from_user.id, self.to_user.id)
+        elif self.friendship_status == "friends":
+            return "User #%s and #%s are friends" % (self.from_user.id, self.to_user.id)
+        else:
+            return "User #%s and #%s are not friends" % (self.from_user.id, self.to_user.id)
