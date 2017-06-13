@@ -125,6 +125,7 @@ class FriendshipReqView(generic.ListView):
 
 
 def accept_friend_req(request):
+    print('accept')
     from_user = User.objects.all().filter(id=request.POST['user_id'])
     to_user = request.user
     qs = FriendshipStatus.objects.all().filter(from_user=from_user, to_user=request.user, friendship_status="pending")
@@ -138,6 +139,7 @@ def accept_friend_req(request):
 
 
 def decline_friend_req(request):
+    print('decline')
     # TODO:  make function for repeated lines
     from_user = User.objects.all().filter(id=request.POST['user_id'])
     to_user = request.user

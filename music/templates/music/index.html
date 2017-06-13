@@ -21,10 +21,8 @@
                             <h2>{{ album.album_title }}</h2>
                             <h4>{{ album.artist }}</h4>
 
-                            <!-- View Details -->
                             <a href="{% url 'music:detail' album.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
 
-                            <!-- Delete Album -->
                             <form action="{% url 'music:album-delete' album.id %}" method="post" style="display: inline;">
                                 {% csrf_token %}
                                 <input type="hidden" name="album_id" value="{{ album.id }}" />
@@ -32,12 +30,6 @@
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
                             </form>
-
-                            <!-- Favorite Album -->
-                            <a href="#" class="btn btn-default btn-sm btn-favorite" role="button">
-                                <span class="glyphicon glyphicon-star {% if album.is_favorite %}active{% endif %}"></span>
-                            </a>
-
                         </div>
                     </div>
                 </div>

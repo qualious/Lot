@@ -34,7 +34,7 @@
                     </a>
                 </li>
             </ul>
-            <form class="navbar-form navbar-left " role="search" method="get" action="{% url "music:songs" %}">
+            <form class="navbar-form navbar-left " role="search" method="get" action="{% url 'music:songs' %}">
                 <div class="form-group">
                     <input type="text" class="form-control" name="q" value="">
                 </div>
@@ -44,7 +44,12 @@
                 {% if  user.username %}
                     <li class="">
                         <a href="{% url 'music:friend-reqs' %}">
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Friend Requests
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Friend Requests
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'music:list-friends' %}">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; Friends
                         </a>
                     </li>
                 {% endif %}

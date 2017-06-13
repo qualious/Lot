@@ -5,6 +5,7 @@
 <div class="container container-fluid">
 
     <div class="row">
+        {% if all_friends %}
             {% for friend in all_friends %}
                 <div class="col-sm-4 col-lg-2">
                     <div class="thumbnail">
@@ -22,7 +23,9 @@
                 </div>
                 {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
             {% endfor %}
-
+        {% else %}
+            <h1>You have no friends :( </h1>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
