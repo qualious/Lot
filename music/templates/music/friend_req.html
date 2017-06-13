@@ -23,15 +23,21 @@
                                 {% for friend in friend_reqs %}
                                     <tr>
                                         <td>{{ friend.from_user.username }}</td>
+                                        {% if friend.from_user.email %}
                                         <td>{{ friend.from_user.email }}</td>
+                                        {% else %}
+                                        <td>placeholder@hotmail.com</td>
+                                        {% endif %}
                                         <td>
                                             <!--TODO: Not working, does nothing after it chages the URL-->
                                            <input type="hidden" name="user_id" value="{{ friend.from_user.id }}" />
                                             <a href="{% url 'music:accept-friend-req' friend.from_user.id %}"
-                                               class="btn btn-success btn-xs" role="button"> Accept
+                                               class="btn btn-success btn-xs" role="button">
+                                                <span class="glyphicon glyphicon-remove">&nbsp;Accept</span>
                                             </a>
                                             <a href="{% url 'music:decline-friend-req' friend.from_user.id %}"
-                                               class="btn btn-danger btn-xs" role="button"> Decline
+                                               class="btn btn-danger btn-xs" role="button">
+                                                <span class="glyphicon glyphicon-remove">&nbsp;Decline</span>
                                             </a>
                                         </td>
                                     </tr>

@@ -13,7 +13,7 @@
                             <h2>{{ user.username }}</h2>
                             <h4>{{ user.email }}</h4>
                                <a href="{% url 'music:accept-friend-req' friend.from_user.id %}"
-                                  class="btn btn-success btn-xs" role="button">
+                                  class="btn btn-danger btn-xs" role="button">
                                     <span class="glyphicon glyphicon-remove">Remove Friend</span>
                                 </a>
                         </div>
