@@ -7,7 +7,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from .forms import UserForm
-from django.db import connection
 
 
 class IndexView(generic.ListView):
@@ -124,34 +123,41 @@ class FriendshipReqView(generic.ListView):
         return FriendshipStatus.objects.all().filter(to_user=self.request.user, friendship_status="pending")
 
 
-def accept_friend_req(request):
-    print('accept')
-    from_user = User.objects.all().filter(id=request.POST['user_id'])
-    to_user = request.user
-    qs = FriendshipStatus.objects.all().filter(from_user=from_user, to_user=request.user, friendship_status="pending")
+def accept_friend_req(request, pk):
+    from_user = User.objects.all().filter(id=pk).first()
+    to_user_id = request.user.id
+    to_user = User.objects.all().filter(id=to_user_id).first()
+    friendship_status_now = "friends"
+    query = FriendshipStatus(from_user=from_user, to_user=to_user, friendship_status=friendship_status_now)
+    query.save()
+    query2 = FriendshipStatus(from_user=to_user, to_user=from_user, friendship_status=friendship_status_now)
+    query2.save()
+    qs = FriendshipStatus.objects.all().filter(from_user=from_user, to_user=to_user, friendship_status="pending")
     qs.delete()
-    friendship_status = "friends"
+    return redirect('music:friend-reqs')
+
+
+def decline_friend_req(request, pk):
+    from_user = User.objects.all().filter(id=pk).first()
+    to_user = request.user
+    friendship_status_now = "not_friends"
+    query = FriendshipStatus(from_user=from_user, to_user=to_user, friendship_status=friendship_status_now)
+    query.save()
+    query2 = FriendshipStatus(from_user=to_user, to_user=from_user, friendship_status=friendship_status_now)
+    query2.save()
+    qs = FriendshipStatus.objects.all().filter(from_user=from_user, to_user=to_user, friendship_status="pending")
+    qs.delete()
+    return redirect('music:friend-reqs')
+
+
+def friend_remove(request, pk):
+    from_user = User.objects.all().filter(id=pk)
+    to_user = request.user
+    friendship_status = "not_friends"
     query = FriendshipStatus(from_user, to_user, friendship_status)
     query.save()
     query2 = FriendshipStatus(to_user, from_user, friendship_status)
     query2.save()
-    return redirect('music:friend-reqs')
-
-
-def decline_friend_req(request):
-    print('decline')
-    # TODO:  make function for repeated lines
-    from_user = User.objects.all().filter(id=request.POST['user_id'])
-    to_user = request.user
-    qs = FriendshipStatus.objects.all().filter(from_user=from_user, to_user=request.user, friendship_status="pending")
-    qs.delete()
-    friendship_status = "not_friends"
-    query = FriendshipStatus(from_user, to_user, friendship_status)
-    query.save()
-    return redirect('music:friend-reqs')
-
-
-def friend_remove(request):
-    from_user = User.objects.all().filter(id=request.POST['user_id'])
     qs = FriendshipStatus.objects.all().filter(from_user=from_user, to_user=request.user, friendship_status="friends")
     qs.delete()
+    return redirect('music:friend-reqs')

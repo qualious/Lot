@@ -3,6 +3,7 @@ from . import views
 
 app_name = 'music'
 
+
 urlpatterns = [
     # /music/
     url(r'^$', views.IndexView.as_view(), name='index'), 
@@ -32,10 +33,10 @@ urlpatterns = [
     url(r'^friends/$', views.FriendView.as_view(), name='list-friends'),
     #/friends/'$pk'/delete
     url(r'^friends/(?P<pk>[0-9]+)/delete/$', views.friend_remove, name='friend-remove'),
-    #/friends/reqs
-    url(r'^friends/reqs',  views.FriendshipReqView.as_view(), name='friend-reqs'),
     #/friends/reqs/'$pk'/answer
     url(r'^friends/reqs/accept/(?P<pk>[0-9]+)/$',  views.accept_friend_req, name='accept-friend-req'),
     #/friends/reqs/'$pk'/answer
     url(r'^friends/reqs/decline/(?P<pk>[0-9]+)/$',  views.decline_friend_req, name='decline-friend-req'),
+    #/friends/reqs
+    url(r'^friends/reqs/$',  views.FriendshipReqView.as_view(), name='friend-reqs'),
 ]
